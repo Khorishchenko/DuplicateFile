@@ -1,6 +1,6 @@
 # DuplicateFile
 
-In order to start the assembly of the program, we use the command while in <root>.: $ <cmake -S . -B build> 
+In order to start the assembly of the program, we use the command while in root: $ <cmake -S . -B build> 
 
 
 next: 

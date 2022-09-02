@@ -1,36 +1,15 @@
-#ifndef _ADD_H
-#define _ADD_H
+#ifndef VERIFICATIONS_H
+#define VERIFICATIONS_H
 
 #include <iostream>
 #include <experimental/filesystem>
 #include <fstream>
 #include <algorithm>
-#include <vector>
 
 namespace fs = std::experimental::filesystem;
 
-std::vector<std::string> SearchDuplicat(const fs::path &dir, const fs::path &dir_two) {
 
-    std::vector<std::string> duplicatFiles;
-
-    for (fs::recursive_directory_iterator it(dir), end; it != end; ++it) {
-        for (fs::recursive_directory_iterator it_2(dir_two), end; it_2 != end; ++it_2) {
-            if (it->path().filename() == it_2->path().filename()) {
-                duplicatFiles.push_back(it->path().filename().string());
-            }
-        }
-    }
-
-    if(duplicatFiles.empty()) {
-        duplicatFiles.push_back("No duplicate files found");
-        return duplicatFiles;
-    }
-    else {
-        return duplicatFiles;
-    }
-}
-
-bool CheckForCorrectnessOfInput(fs::path &dir, fs::path &dir_two, int argc, char *argv[]) {
+bool IsCorrectnessOfInput(fs::path &dir, fs::path &dirTwo, int argc, char *argv[]) {
 
      if (argc == 1) {
         std::cout << "You have not entered a directory name and The path to the directory \n";
@@ -47,7 +26,7 @@ bool CheckForCorrectnessOfInput(fs::path &dir, fs::path &dir_two, int argc, char
     }
     else if (argc == 4) {
         dir = dir / argv[1];
-        dir_two = dir / argv[1];
+        dirTwo = dir / argv[1];
 
         if(!fs::is_directory(dir)) {
             std::cout << "The path to the directory was entered incorrectly \n Please try again" << std::endl;
@@ -55,7 +34,7 @@ bool CheckForCorrectnessOfInput(fs::path &dir, fs::path &dir_two, int argc, char
         }
         else {
             dir = dir / argv[2];
-            dir_two = dir_two / argv[3];
+            dirTwo = dirTwo / argv[3];
             return true;
         }
     }
@@ -65,15 +44,15 @@ bool CheckForCorrectnessOfInput(fs::path &dir, fs::path &dir_two, int argc, char
     }
 }
 
-bool CheckingTheDirectoryExists(fs::path &dir, fs::path &dir_two) {
+bool IsExistsDirectory(fs::path &dir, fs::path &dirTwo) {
 
-        if (!fs::is_directory(dir) || !fs::is_directory(dir_two)) {
-            if(!fs::is_directory(dir) && fs::is_directory(dir_two)) {
+        if (!fs::is_directory(dir) || !fs::is_directory(dirTwo)) {
+            if(!fs::is_directory(dir) && fs::is_directory(dirTwo)) {
                 std::cout << "A directory with " << dir.string() <<  " name does not exist in the current directory " << std::endl;
                 return false;
             }
-            else if (!fs::is_directory(dir_two) && fs::is_directory(dir)) {
-                std::cout << "A directory with " << dir_two.string() <<  " name does not exist in the current directory " << std::endl;
+            else if (!fs::is_directory(dirTwo) && fs::is_directory(dir)) {
+                std::cout << "A directory with " << dirTwo.string() <<  " name does not exist in the current directory " << std::endl;
                 return false;
             }
             else {
@@ -86,15 +65,15 @@ bool CheckingTheDirectoryExists(fs::path &dir, fs::path &dir_two) {
         }
 }
 
-bool CheckingIfFilesExistInTheDedirectory(fs::path &dir, fs::path &dir_two) {
+bool IsExistFiles(fs::path &dir, fs::path &dirTwo) {
 
-    if (fs::is_empty(dir) || fs::is_empty(dir_two)) {
-        if(fs::is_empty(dir)  && !fs::is_empty(dir_two)) {
-            std::cout << "There are no files in the directorie " << dir_two.string() << std::endl;
+    if (fs::is_empty(dir) || fs::is_empty(dirTwo)) {
+        if(fs::is_empty(dir)  && !fs::is_empty(dirTwo)) {
+            std::cout << "There are no files in the directorie " << dirTwo.string() << std::endl;
             return false;
         }
-        else if (fs::is_empty(dir_two) && !fs::is_empty(dir) ) {
-            std::cout << "There are no files in the directorie " << dir_two.string() << std::endl;
+        else if (fs::is_empty(dirTwo) && !fs::is_empty(dir) ) {
+            std::cout << "There are no files in the directorie " << dirTwo.string() << std::endl;
             return false;
         }
         else {

@@ -5,10 +5,10 @@ In order to start the assembly of the program, we use the command: <cmake -S . -
 next: <cd build>
 to run: <make>
 
-To run the tests, use the command: ./tests_app
+To run the tests, use the command: ./sample
 
 To run the program, use the command with command line arguments:
-./app <name_patch_directory> <name_dir> <name_dir_two>
+./duplicatFile_App <namePatchDirectory> <nameDir> <nameDirTwo>
 
 The first argument is the path to the directories in which duplicate files will be searched.
 

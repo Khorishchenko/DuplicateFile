@@ -8,6 +8,21 @@
 
 namespace fs = std::experimental::filesystem;
 
+bool ReadingDirectory(fs::path &dir, fs::path &dirTwo, char *argv[]) {
+    
+        dir = dir / argv[1];
+        dirTwo = dir / argv[1];
+
+        if(!fs::is_directory(dir)) {
+            std::cout << "The path to the directory was entered incorrectly \n Please try again" << std::endl;
+            return false;
+        }
+        else {
+            dir = dir / argv[2];
+            dirTwo = dirTwo / argv[3];
+            return true;
+        }
+}
 
 bool IsCorrectnessOfInput(fs::path &dir, fs::path &dirTwo, int argc, char *argv[]) {
 
@@ -25,21 +40,10 @@ bool IsCorrectnessOfInput(fs::path &dir, fs::path &dirTwo, int argc, char *argv[
         return false;
     }
     else if (argc == 4) {
-        dir = dir / argv[1];
-        dirTwo = dir / argv[1];
-
-        if(!fs::is_directory(dir)) {
-            std::cout << "The path to the directory was entered incorrectly \n Please try again" << std::endl;
-            return false;
-        }
-        else {
-            dir = dir / argv[2];
-            dirTwo = dirTwo / argv[3];
-            return true;
-        }
+        return ReadingDirectory(dir, dirTwo, argv);
     }
     else {
-        std::cout << "Only two arguments no more \n try again " << std::endl;
+        std::cout << "Only three arguments no more \n try again " << std::endl;
         return false;
     }
 }

@@ -1,14 +1,11 @@
 #ifndef SEARCH_DUPLICAT_FILE_H
 #define SEARCH_DUPLICAT_FILE_H
 
-#include <vector>
-#include <fstream>
-#include <algorithm>
-#include <experimental/filesystem>
+#include "FileSystem.h"
 
 namespace fs = std::experimental::filesystem;
 
-bool SearchDuplicat(const fs::path &dir, const fs::path &dir_two) {
+bool SearchDuplicat(const FileSystem &dir, const FileSystem &dir_two) {
 
     bool duplicatFileNotExists = true;
 

@@ -1,30 +1,25 @@
 #ifndef VERIFICATIONS_H
 #define VERIFICATIONS_H
 
-#include <iostream>
-#include <experimental/filesystem>
-#include <fstream>
-#include <algorithm>
+#include "FileSystem.h"
 
-namespace fs = std::experimental::filesystem;
-
-bool ReadingDirectory(fs::path &dir, fs::path &dirTwo, char *argv[]) {
+bool ReadingDirectory(FileSystem &dir, FileSystem &dirTwo, char *argv[]) {
     
-        dir = dir / argv[1];
-        dirTwo = dir / argv[1];
+        dir.getDir() = dir.getDir() / argv[1];
+        dirTwo.getDir() = dir.getDir() / argv[1];
 
-        if(!fs::is_directory(dir)) {
+        if(!dir.IsDirectory()) {
             std::cout << "The path to the directory was entered incorrectly \n Please try again" << std::endl;
             return false;
         }
         else {
-            dir = dir / argv[2];
-            dirTwo = dirTwo / argv[3];
+            dir.getDir() = dir.getDir() / argv[2];
+            dirTwo.getDir() = dir.getDir() / argv[3];
             return true;
         }
 }
 
-bool IsCorrectnessOfInput(fs::path &dir, fs::path &dirTwo, int argc, char *argv[]) {
+bool IsCorrectnessOfInput(FileSystem &dir, FileSystem &dirTwo, int argc, char *argv[]) {
 
      if (argc == 1) {
         std::cout << "You have not entered a directory name and The path to the directory \n";
@@ -48,15 +43,15 @@ bool IsCorrectnessOfInput(fs::path &dir, fs::path &dirTwo, int argc, char *argv[
     }
 }
 
-bool IsExistsDirectory(fs::path &dir, fs::path &dirTwo) {
+bool IsExistsDirectory(FileSystem &dir, FileSystem &dirTwo) {
 
-        if (!fs::is_directory(dir) || !fs::is_directory(dirTwo)) {
-            if(!fs::is_directory(dir) && fs::is_directory(dirTwo)) {
-                std::cout << "A directory with " << dir.string() <<  " name does not exist in the current directory " << std::endl;
+        if (!dir.IsDirectory() || !dirTwo.IsDirectory()) {
+            if(!dir.IsDirectory() && dirTwo.IsDirectory()) {
+                std::cout << "A directory with " << dirTwo.getDir().string() <<  " name does not exist in the current directory " << std::endl;
                 return false;
             }
-            else if (!fs::is_directory(dirTwo) && fs::is_directory(dir)) {
-                std::cout << "A directory with " << dirTwo.string() <<  " name does not exist in the current directory " << std::endl;
+            else if (!dirTwo.IsDirectory() && dir.IsDirectory()) {
+                std::cout << "A directory with " << dirTwo.getDir().string() <<  " name does not exist in the current directory " << std::endl;
                 return false;
             }
             else {
@@ -69,15 +64,15 @@ bool IsExistsDirectory(fs::path &dir, fs::path &dirTwo) {
         }
 }
 
-bool IsExistFiles(fs::path &dir, fs::path &dirTwo) {
+bool IsExistFiles(FileSystem &dir, FileSystem &dirTwo) {
 
-    if (fs::is_empty(dir) || fs::is_empty(dirTwo)) {
-        if(fs::is_empty(dir)  && !fs::is_empty(dirTwo)) {
-            std::cout << "There are no files in the directorie " << dirTwo.string() << std::endl;
+    if (dir.IsEmpty() || dirTwo.IsEmpty()) {
+        if(dir.IsEmpty()  && !dirTwo.IsEmpty()) {
+            std::cout << "There are no files in the directorie " << dirTwo.getDir().string() << std::endl;
             return false;
         }
-        else if (fs::is_empty(dirTwo) && !fs::is_empty(dir) ) {
-            std::cout << "There are no files in the directorie " << dirTwo.string() << std::endl;
+        else if (dirTwo.IsEmpty() && !dir.IsEmpty() ) {
+            std::cout << "There are no files in the directorie " << dirTwo.getDir().string() << std::endl;
             return false;
         }
         else {

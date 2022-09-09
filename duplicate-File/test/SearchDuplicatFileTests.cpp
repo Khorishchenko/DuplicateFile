@@ -3,6 +3,7 @@
 
 #include "Verifications.h"
 #include "SearchDuplicatFile.h"
+#include "FileSystem.h"
 // #include "VerificationsTests.cpp"
 
 #include <limits>

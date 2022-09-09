@@ -1,76 +1,4 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-
-#include "Verifications.h"
-#include "SearchDuplicatFile.h"
-// #include "VerificationsTests.cpp"
-
-#include <limits>
-#include <vector>
-#include <ctime>
-#include <cstdio>
-#include <string>
-
-namespace fs = std::experimental::filesystem;
-typedef std::experimental::filesystem::v1::path t_typeFile;
-
-t_typeFile CreateDir(std::string nameDir) {
-
-    t_typeFile resDir = fs::current_path();
-
-    resDir = resDir / nameDir;
-    fs::create_directories(resDir);
-
-    return resDir;
-}
-
-void CreateFiles(fs::path &resDir, std::string name_file1= "", std::string name_file2 = "", std::string name_file3 = "") {
-
-    std::vector<std::string> res_file = 
-    {
-        resDir.string() + "/" + name_file1,
-        resDir.string() + "/" + name_file2,
-        resDir.string() + "/" + name_file3
-    };
-
-    // create files 
-    for(auto &f: res_file) {
-        std::ofstream(f) << "data";
-    }
-}
-
-TEST(SearchDuplicatTest, Duplicate_Found) {
-     // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
-
-    // Act
-    CreateFiles(dir, "file", "fileTwo");
-    CreateFiles(dirTwo, "files", "fileTwo");
-  
-    // Assert
-    ASSERT_TRUE(SearchDuplicat(dir, dirTwo));
-
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
-}
-
-TEST(SearchDuplicatTest, Duplicate_Not_Found) {
-     // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
-
-    // Act
-    CreateFiles(dir, "file", "fileTwo");
-    CreateFiles(dirTwo, "files", "filesTwo");
-    
-    // Assert
-    ASSERT_FALSE(SearchDuplicat(dir, dirTwo));
-
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
-}
-
+#include "SearchDuplicatFileTests.cpp"
 
 TEST(IsCorrectnessOfInputTest, Entering_Correct_Data) {
      // Arrange
@@ -162,10 +90,4 @@ TEST(IsExistFilesTest, Files_In_Directory_DoNot_Exist) {
 
     fs::remove_all(dir);
     fs::remove_all(dirTwo);
-}
-
-int main(int argc, char* argv[])
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

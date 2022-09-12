@@ -3,14 +3,12 @@
 
 #include "FileSystem.h"
 
-namespace fs = std::experimental::filesystem;
-
-bool SearchDuplicat(const FileSystem &dir, const FileSystem &dir_two) {
+bool SearchDuplicat(FileSystem &dir, FileSystem &dirTwo) {
 
     bool duplicatFileNotExists = true;
 
-    for (fs::recursive_directory_iterator it(dir), end; it != end; ++it) {
-        for (fs::recursive_directory_iterator it_2(dir_two), end; it_2 != end; ++it_2) {
+    for (auto it = dir.ItBegin(), end = dir.ItEnd(); it != end; ++it) {
+        for (auto it_2 = dirTwo.ItBegin(), end = dirTwo.ItEnd(); it_2 != end; ++it_2) {
             if (it->path().filename() == it_2->path().filename()) {
                 std::cout << "Duplicate file is: " << it->path().filename().string() << std::endl;
                 duplicatFileNotExists = false;
@@ -19,7 +17,7 @@ bool SearchDuplicat(const FileSystem &dir, const FileSystem &dir_two) {
     }
 
     if(duplicatFileNotExists) {
-        std::cout << "Duplicate file does not exist !" <<std::endl;
+        std::cout << "Duplicate file does not exist !" << std::endl;
         return false;
     }
     else {

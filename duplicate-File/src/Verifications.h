@@ -9,12 +9,12 @@ bool ReadingDirectory(FileSystem &dir, FileSystem &dirTwo, char *argv[]) {
         dirTwo.getDir() = dir.getDir() / argv[1];
 
         if(!dir.IsDirectory()) {
-            std::cout << "The path to the directory was entered incorrectly \n Please try again" << std::endl;
+            std::cout << "The path to the directory was entered incorrectly\n Please try again" << std::endl;
             return false;
         }
         else {
             dir.getDir() = dir.getDir() / argv[2];
-            dirTwo.getDir() = dir.getDir() / argv[3];
+            dirTwo.getDir() = dirTwo.getDir() / argv[3];
             return true;
         }
 }
@@ -47,7 +47,7 @@ bool IsExistsDirectory(FileSystem &dir, FileSystem &dirTwo) {
 
         if (!dir.IsDirectory() || !dirTwo.IsDirectory()) {
             if(!dir.IsDirectory() && dirTwo.IsDirectory()) {
-                std::cout << "A directory with " << dirTwo.getDir().string() <<  " name does not exist in the current directory " << std::endl;
+                std::cout << "A directory with " << dir.getDir().string() <<  " name does not exist in the current directory " << std::endl;
                 return false;
             }
             else if (!dirTwo.IsDirectory() && dir.IsDirectory()) {
@@ -68,7 +68,7 @@ bool IsExistFiles(FileSystem &dir, FileSystem &dirTwo) {
 
     if (dir.IsEmpty() || dirTwo.IsEmpty()) {
         if(dir.IsEmpty()  && !dirTwo.IsEmpty()) {
-            std::cout << "There are no files in the directorie " << dirTwo.getDir().string() << std::endl;
+            std::cout << "There are no files in the directorie " << dir.getDir().string() << std::endl;
             return false;
         }
         else if (dirTwo.IsEmpty() && !dir.IsEmpty() ) {

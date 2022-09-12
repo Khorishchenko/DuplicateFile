@@ -4,20 +4,10 @@
 #include "Verifications.h"
 #include "SearchDuplicatFile.h"
 #include "FileSystem.h"
-// #include "VerificationsTests.cpp"
 
-#include <limits>
-#include <vector>
-#include <ctime>
-#include <cstdio>
-#include <string>
+TypeFile_t CreateDir(std::string nameDir) {
 
-namespace fs = std::experimental::filesystem;
-typedef std::experimental::filesystem::v1::path t_typeFile;
-
-t_typeFile CreateDir(std::string nameDir) {
-
-    t_typeFile resDir = fs::current_path();
+    TypeFile_t resDir = fs::current_path();
 
     resDir = resDir / nameDir;
     fs::create_directories(resDir);
@@ -25,25 +15,39 @@ t_typeFile CreateDir(std::string nameDir) {
     return resDir;
 }
 
-void CreateFiles(fs::path &resDir, std::string name_file1= "", std::string name_file2 = "", std::string name_file3 = "") {
+void CreateFiles(FileSystem &resDir, std::string nameFile = "", std::string nameFileTwo = "", std::string nameFileThree = "") {
 
-    std::vector<std::string> res_file = 
+    std::vector<std::string> resFile = 
     {
-        resDir.string() + "/" + name_file1,
-        resDir.string() + "/" + name_file2,
-        resDir.string() + "/" + name_file3
+        resDir.getDir().string() + "/" + nameFile,
+        resDir.getDir().string() + "/" + nameFileTwo,
+        resDir.getDir().string() + "/" + nameFileThree
     };
 
     // create files 
-    for(auto &f: res_file) {
-        std::ofstream(f) << "data";
+    for(auto &file: resFile) {
+        std::ofstream(file) << "data";
     }
 }
 
+class FileSustemMock : public FileSystem {
+
+public:
+
+    MOCK_METHOD(TypeFile_t&, getDir, (), (override));
+    MOCK_METHOD(IteratorFile_t, ItBegin, (), (override));
+    MOCK_METHOD(IteratorFile_t, ItEnd, (), (override));
+    MOCK_METHOD(bool, IsDirectory, (), (override));
+    MOCK_METHOD(bool, IsEmpty, (), (override));
+
+};
+
+// TODO: GOOGLE TEST
+
 TEST(SearchDuplicatTest, Duplicate_Found) {
      // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
+    FileSystem dir(CreateDir("dir"));
+    FileSystem dirTwo(CreateDir("dirTwo"));
 
     // Act
     CreateFiles(dir, "file", "fileTwo");
@@ -52,14 +56,14 @@ TEST(SearchDuplicatTest, Duplicate_Found) {
     // Assert
     ASSERT_TRUE(SearchDuplicat(dir, dirTwo));
 
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
+    fs::remove_all(dir.getDir());
+    fs::remove_all(dirTwo.getDir());
 }
 
 TEST(SearchDuplicatTest, Duplicate_Not_Found) {
      // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
+    FileSystem dir(CreateDir("dir"));
+    FileSystem dirTwo(CreateDir("dirTwo"));
 
     // Act
     CreateFiles(dir, "file", "fileTwo");
@@ -68,15 +72,14 @@ TEST(SearchDuplicatTest, Duplicate_Not_Found) {
     // Assert
     ASSERT_FALSE(SearchDuplicat(dir, dirTwo));
 
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
+    fs::remove_all(dir.getDir());
+    fs::remove_all(dirTwo.getDir());
 }
-
 
 TEST(IsCorrectnessOfInputTest, Entering_Correct_Data) {
      // Arrange
-    auto dir = fs::path();
-    auto dirTwo = fs::path();
+    FileSystem dir;
+    FileSystem dirTwo;
     auto path = fs::current_path().string();
     
     // Act
@@ -88,21 +91,21 @@ TEST(IsCorrectnessOfInputTest, Entering_Correct_Data) {
 
 TEST(IsCorrectnessOfInputTest, Incorrect_Data_Entry) {
      // Arrange
-    auto dir = fs::path();
-    auto dirTwo = fs::path();
+    FileSystem dir;
+    FileSystem dirTwo;
+    auto path = fs::current_path().string();
 
     // Act
-    char *argv[] = {(char*)"", (char*)"/Users/user/Desktop/projectPIRWork_2/build", (char*)"dir"};
+    char *argv[] = {(char*)"", (char*)path.c_str(), (char*)"dir"};
 
     // Assert
     ASSERT_FALSE(IsCorrectnessOfInput(dir, dirTwo, 3, argv));
 }
 
-
 TEST(IsCorrectnessOfInputTest, Path_To_Directory_Was_Entered_Incorrectly) {
      // Arrange
-    auto dir = fs::path();
-    auto dirTwo = fs::path();
+    FileSystem dir;
+    FileSystem dirTwo;
 
     // Act
     char *argv[] = {(char*)"", (char*)"/Users/user//Users/user//Users/user/", (char*)"dir"};
@@ -113,21 +116,21 @@ TEST(IsCorrectnessOfInputTest, Path_To_Directory_Was_Entered_Incorrectly) {
 
 TEST(IsExistsDirectoryTest, Directories_Exist) {
     // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
+    FileSystem dir(CreateDir("dir"));
+    FileSystem dirTwo(CreateDir("dirTwo"));
 
 
     // Assert 
     ASSERT_TRUE(IsExistsDirectory(dir, dirTwo));
 
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
+    fs::remove_all(dir.getDir());
+    fs::remove_all(dirTwo.getDir());
 }
 
 TEST(IsExistsDirectoryTest, Directory_Not_Found) {
     // Arrange
-    t_typeFile dir = fs::current_path();
-    t_typeFile dirTwo = fs::current_path();
+    FileSystem dir(fs::current_path());
+    FileSystem dirTwo(fs::current_path());
 
 
     // Assert 
@@ -136,8 +139,8 @@ TEST(IsExistsDirectoryTest, Directory_Not_Found) {
 
 TEST(IsExistFilesTest, Files_Exist) {
     // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
+    FileSystem dir(CreateDir("dir"));
+    FileSystem dirTwo(CreateDir("dirTwo"));
 
     // Act
     CreateFiles(dir, "file", "fileTwo");
@@ -146,14 +149,14 @@ TEST(IsExistFilesTest, Files_Exist) {
     // Assert 
     ASSERT_TRUE(IsExistFiles(dir, dirTwo));
 
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
+    fs::remove_all(dir.getDir());
+    fs::remove_all(dirTwo.getDir());
 }
 
 TEST(IsExistFilesTest, Files_In_Directory_DoNot_Exist) {
     // Arrange
-    t_typeFile dir = CreateDir("dir");
-    t_typeFile dirTwo = CreateDir("dirTwo");
+    FileSystem dir(CreateDir("dir"));
+    FileSystem dirTwo(CreateDir("dirTwo"));
 
     // Act
     CreateFiles(dir, "file", "fileTwo");
@@ -161,12 +164,87 @@ TEST(IsExistFilesTest, Files_In_Directory_DoNot_Exist) {
     // Assert 
     ASSERT_FALSE(IsExistFiles(dir, dirTwo));
 
-    fs::remove_all(dir);
-    fs::remove_all(dirTwo);
+    fs::remove_all(dir.getDir());
+    fs::remove_all(dirTwo.getDir());
+}
+
+// TODO: MOCK TEST
+
+using ::testing::Return;
+
+TEST(FileSystemTest, getDir) {
+     // Arrang
+    FileSustemMock dirMock;
+    FileSustemMock dirTwoMock;
+
+    // Assert
+    EXPECT_CALL(dirMock, getDir())
+    .Times(0);
+
+    // Act
+    char *argv[] = {(char*)"", (char*)"/Users/user//Users/user//Users/user/", (char*)"dir"};
+    
+     // Assert
+    EXPECT_FALSE(IsExistsDirectory(dirMock, dirTwoMock));
+}
+
+TEST(FileSystemTest, ItBegin) {
+     // Arrang
+    FileSustemMock dirMock;
+    FileSustemMock dirTwoMock;
+
+    // Assert
+    EXPECT_CALL(dirMock, ItBegin())
+    .Times(1);
+
+    // Act
+    SearchDuplicat(dirMock, dirTwoMock);
+}
+
+TEST(FileSystemTest, ItEnd) {
+    // Arrang
+    FileSustemMock dirMock;
+    FileSustemMock dirTwoMock;
+
+    // Assert
+    EXPECT_CALL(dirMock, ItEnd())
+    .Times(1);
+
+    // Act
+    SearchDuplicat(dirMock, dirTwoMock);
+}
+
+TEST(FileSystemTest, IsDirectory) {
+     // Arrang
+    FileSustemMock dirMock;
+    FileSustemMock dirTwoMock;
+
+    // Assert
+    EXPECT_CALL(dirMock, IsDirectory())
+    .Times(3)
+    .WillRepeatedly(Return(false));
+
+    // Act
+    IsExistsDirectory(dirMock, dirTwoMock);
+}
+
+TEST(FileSystemTest, IsEmpty) {
+     // Arrang
+    FileSustemMock dirMock;
+    FileSustemMock dirTwoMock;
+
+    // Assert
+    EXPECT_CALL(dirMock, IsEmpty())
+    .Times(1)
+    .WillRepeatedly(Return(false));
+
+    // Act
+    IsExistFiles(dirMock, dirTwoMock);
 }
 
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleMock(&argc, argv);
     return RUN_ALL_TESTS();
 }

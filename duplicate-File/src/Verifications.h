@@ -1,9 +1,9 @@
 #ifndef VERIFICATIONS_H
 #define VERIFICATIONS_H
 
-#include "FileSystem.h"
+#include "Directory.h"
 
-bool ReadingDirectory(FileSystem &dir, FileSystem &dirTwo, char *argv[]) {
+bool ReadingDirectory(Directory &dir, Directory &dirTwo, char *argv[]) {
     
         dir.getDir() = dir.getDir() / argv[1];
         dirTwo.getDir() = dir.getDir() / argv[1];
@@ -19,7 +19,7 @@ bool ReadingDirectory(FileSystem &dir, FileSystem &dirTwo, char *argv[]) {
         }
 }
 
-bool IsCorrectnessOfInput(FileSystem &dir, FileSystem &dirTwo, int argc, char *argv[]) {
+bool IsCorrectnessOfInput(Directory &dir, Directory &dirTwo, int argc, char *argv[]) {
 
      if (argc == 1) {
         std::cout << "You have not entered a directory name and The path to the directory \n";
@@ -43,7 +43,7 @@ bool IsCorrectnessOfInput(FileSystem &dir, FileSystem &dirTwo, int argc, char *a
     }
 }
 
-bool IsExistsDirectory(FileSystem &dir, FileSystem &dirTwo) {
+bool IsExistsDirectory(Directory &dir, Directory &dirTwo) {
 
         if (!dir.IsDirectory() || !dirTwo.IsDirectory()) {
             if(!dir.IsDirectory() && dirTwo.IsDirectory()) {
@@ -64,7 +64,7 @@ bool IsExistsDirectory(FileSystem &dir, FileSystem &dirTwo) {
         }
 }
 
-bool IsExistFiles(FileSystem &dir, FileSystem &dirTwo) {
+bool IsExistFiles(Directory &dir, Directory &dirTwo) {
 
     if (dir.IsEmpty() || dirTwo.IsEmpty()) {
         if(dir.IsEmpty()  && !dirTwo.IsEmpty()) {

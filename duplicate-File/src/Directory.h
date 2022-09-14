@@ -14,10 +14,10 @@ namespace fs = std::experimental::filesystem;
 typedef std::experimental::filesystem::v1::path TypeFile_t;
 typedef std::experimental::filesystem::v1::directory_iterator IteratorFile_t;
 
-class FileSystem {
+class Directory {
     
 public:
-    FileSystem(TypeFile_t Dir = fs::path()) : m_Dir(Dir) {}
+    Directory(TypeFile_t Dir = fs::path()) : m_Dir(Dir) {}
 
     virtual TypeFile_t& getDir() {
         return m_Dir;

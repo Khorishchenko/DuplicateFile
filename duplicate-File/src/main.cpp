@@ -2,12 +2,12 @@
 
 #include "Verifications.h"
 #include "SearchDuplicatFile.h"
-#include "FileSystem.h"
+#include "Directory.h"
 
 int main(int argc, char *argv[]) {
 
-    FileSystem dir;
-    FileSystem dirTwo;
+    Directory dir;
+    Directory dirTwo;
 
     if(IsCorrectnessOfInput(dir, dirTwo, argc, argv) 
         && IsExistsDirectory(dir, dirTwo) 

@@ -1,9 +1,9 @@
 #ifndef SEARCH_DUPLICAT_FILE_H
 #define SEARCH_DUPLICAT_FILE_H
 
-#include "FileSystem.h"
+#include "Directory.h"
 
-bool SearchDuplicat(FileSystem &dir, FileSystem &dirTwo) {
+bool SearchDuplicat(Directory &dir, Directory &dirTwo) {
 
     bool duplicatFileNotExists = true;
 

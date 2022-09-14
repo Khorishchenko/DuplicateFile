@@ -16,8 +16,8 @@ set(CMAKE_CXX_STANDARD 17)
 #Flags passed to the C++ compiler.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 ")
 
-set(SRC_LIST src/main.cpp src/Verifications.h src/SearchDuplicatFile.h src/FileSystem.h)
-set(SRC_LIST_TEST test/SearchDuplicatFileTests.cpp)
+set(SRC_LIST src/main.cpp src/Verifications.h src/SearchDuplicatFile.h src/Directory.h)
+set(SRC_LIST_TEST test/mainTest.cpp test/SearchDuplicatFileTests.h test/VerificationsTest.h)
 
 # main Target 
 add_executable(

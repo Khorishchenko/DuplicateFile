@@ -19,3 +19,4 @@ The first argument is the path to the directories in which duplicate files will 
 
 The second argument is the name of the first directory.
 The third argument is the name of the second directory.
+There is also a test of the program using google Test and mook test
